@@ -43,7 +43,7 @@ const HeroSection = () => {
             className="font-heading font-bold text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-primary-foreground leading-tight mb-6"
           >
             Complete Material Solutions for{" "}
-            <span className="text-accent">Electronics Manufacturing</span>
+            <span className="text-primary">Electronics Manufacturing</span>
           </motion.h1>
 
           <motion.p
