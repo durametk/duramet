@@ -76,7 +76,7 @@ const HeroSection = () => {
                 key={index}
                 className="flex items-center gap-2 text-primary-foreground/90"
               >
-                <CheckCircle className="h-5 w-5 text-accent" />
+                <CheckCircle className="h-5 w-5 text-primary-foreground" />
                 <span className="font-medium">{feature}</span>
               </div>
             ))}
@@ -89,13 +89,13 @@ const HeroSection = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-wrap gap-4"
           >
-            <Button asChild variant="hero" size="xl">
+            <Button asChild variant="hero" size="lg">
               <Link to="/industries">
                 Explore Industries
-                <ArrowRight className="h-5 w-5" />
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="heroOutline" size="xl">
+            <Button asChild variant="heroOutline" size="lg">
               <a href="#contact">Contact Us</a>
             </Button>
           </motion.div>
