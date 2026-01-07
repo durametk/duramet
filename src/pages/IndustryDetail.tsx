@@ -297,10 +297,24 @@ const IndustryDetail = () => {
                 <p className="text-muted-foreground text-sm mb-4">
                   Get detailed information about our {industry.name.toLowerCase()} products and solutions.
                 </p>
-                <Button variant="default" size="lg" className="w-full">
-                  <Download className="h-5 w-5" />
-                  Download PDF
-                </Button>
+                {industry.pdfUrl ? (
+                  <Button 
+                    variant="default" 
+                    size="lg" 
+                    className="w-full"
+                    asChild
+                  >
+                    <a href={industry.pdfUrl} target="_blank" rel="noopener noreferrer">
+                      <Download className="h-5 w-5 mr-2" />
+                      Download PDF
+                    </a>
+                  </Button>
+                ) : (
+                  <Button variant="default" size="lg" className="w-full" disabled>
+                    <Download className="h-5 w-5 mr-2" />
+                    PDF Coming Soon
+                  </Button>
+                )}
               </motion.div>
             </div>
           </div>
