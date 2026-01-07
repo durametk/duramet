@@ -82,6 +82,23 @@ netlify deploy --prod
 
 ## Important Notes
 
+### Automatic Deployment
+**Yes, changes will automatically reflect on Netlify!** 
+
+If you connected your GitHub repository to Netlify:
+- **Every push to your main/master branch** will automatically trigger a new deployment
+- Netlify will rebuild and redeploy your site automatically
+- You can see deployment status in the Netlify dashboard
+- Build time is usually 2-3 minutes
+
+**To deploy changes:**
+1. Make your changes locally
+2. Commit: `git add .` then `git commit -m "Your message"`
+3. Push: `git push origin main`
+4. Netlify will automatically detect the push and start deploying
+
+You can also manually trigger deployments from the Netlify dashboard if needed.
+
 ### Serverless Functions
 - Netlify Functions are located in `netlify/functions/`
 - The function `send-email.ts` will be available at: `/.netlify/functions/send-email`
