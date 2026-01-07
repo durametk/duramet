@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 // Partner logos - using public folder paths
 const partnerLogos: { [key: string]: string } = {
@@ -11,20 +12,139 @@ const partnerLogos: { [key: string]: string } = {
   Nitsuku: "/logo/nisstuko1.svg",
 };
 
+interface Logo {
+  name: string;
+  id: number;
+  img: string;
+}
+
+interface LogoColumnProps {
+  logos: Logo[];
+  index: number;
+  currentTime: number;
+}
+
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
+const distributeLogos = (allLogos: Logo[], columnCount: number): Logo[][] => {
+  const shuffled = shuffleArray(allLogos);
+  const columns: Logo[][] = Array.from({ length: columnCount }, () => []);
+
+  shuffled.forEach((logo, index) => {
+    columns[index % columnCount].push(logo);
+  });
+
+  const maxLength = Math.max(...columns.map((col) => col.length));
+  columns.forEach((col) => {
+    while (col.length < maxLength) {
+      col.push(shuffled[Math.floor(Math.random() * shuffled.length)]);
+    }
+  });
+
+  return columns;
+};
+
+const LogoColumn: React.FC<LogoColumnProps> = React.memo(
+  ({ logos, index, currentTime }) => {
+    const cycleInterval = 2000;
+    const columnDelay = index * 200;
+    const adjustedTime = (currentTime + columnDelay) % (cycleInterval * logos.length);
+    const currentIndex = Math.floor(adjustedTime / cycleInterval);
+
+    const currentLogo = useMemo(() => logos[currentIndex], [logos, currentIndex]);
+
+    return (
+      <motion.div
+        className="relative h-20 w-32 overflow-hidden md:h-24 md:w-48"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          delay: index * 0.1,
+          duration: 0.5,
+          ease: "easeOut",
+        }}
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`${currentLogo.id}-${currentIndex}`}
+            className="absolute inset-0 flex items-center justify-center bg-background rounded-lg shadow-sm border border-border"
+            initial={{ y: "10%", opacity: 0, filter: "blur(8px)" }}
+            animate={{
+              y: "0%",
+              opacity: 1,
+              filter: "blur(0px)",
+              transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 20,
+                mass: 1,
+                bounce: 0.2,
+                duration: 0.5,
+              },
+            }}
+            exit={{
+              y: "-20%",
+              opacity: 0,
+              filter: "blur(6px)",
+              transition: {
+                type: "tween",
+                ease: "easeIn",
+                duration: 0.3,
+              },
+            }}
+          >
+            <img
+              src={currentLogo.img}
+              alt={currentLogo.name}
+              className={`h-12 w-auto max-h-[60%] max-w-[80%] object-contain ${
+                currentLogo.name === "PDC" ? "brightness-0" : ""
+              }`}
+              style={currentLogo.name === "PDC" ? { filter: "brightness(0)" } : {}}
+            />
+          </motion.div>
+        </AnimatePresence>
+      </motion.div>
+    );
+  }
+);
+
+LogoColumn.displayName = "LogoColumn";
+
 const PartnersCarousel = () => {
-  // Partner companies - Associated Brands with logo images
-  const partners = [
-    { name: "PDC", logo: partnerLogos.PDC },
-    { name: "Henkel", logo: partnerLogos.Henkel },
-    { name: "3M", logo: partnerLogos["3M"] },
-    { name: "Walsin", logo: partnerLogos.Walsin },
-    { name: "Kamaya", logo: partnerLogos.Kamaya },
-    { name: "Frontier", logo: partnerLogos.Frontier },
-    { name: "Nitsuku", logo: partnerLogos.Nitsuku },
+  const logos: Logo[] = [
+    { name: "PDC", id: 1, img: partnerLogos.PDC },
+    { name: "Henkel", id: 2, img: partnerLogos.Henkel },
+    { name: "3M", id: 3, img: partnerLogos["3M"] },
+    { name: "Walsin", id: 4, img: partnerLogos.Walsin },
+    { name: "Kamaya", id: 5, img: partnerLogos.Kamaya },
+    { name: "Frontier", id: 6, img: partnerLogos.Frontier },
+    { name: "Nitsuku", id: 7, img: partnerLogos.Nitsuku },
   ];
 
-  // Duplicate for seamless loop
-  const allPartners = [...partners, ...partners];
+  const columnCount = 5;
+  const [logoSets, setLogoSets] = useState<Logo[][]>([]);
+  const [currentTime, setCurrentTime] = useState(0);
+
+  const updateTime = useCallback(() => {
+    setCurrentTime((prevTime) => prevTime + 100);
+  }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(updateTime, 100);
+    return () => clearInterval(intervalId);
+  }, [updateTime]);
+
+  useEffect(() => {
+    const distributedLogos = distributeLogos(logos, columnCount);
+    setLogoSets(distributedLogos);
+  }, []);
 
   return (
     <section className="py-16 bg-muted overflow-hidden">
@@ -45,32 +165,16 @@ const PartnersCarousel = () => {
         </motion.div>
       </div>
 
-      {/* Scrolling Container */}
-      <div className="relative">
-        <div className="flex animate-marquee">
-          {allPartners.map((partner, index) => (
-            <div
-              key={index}
-              className="flex-shrink-0 mx-8 flex items-center justify-center"
-            >
-              <div className="bg-background rounded-lg px-10 py-6 shadow-sm border border-border hover:shadow-md transition-shadow duration-300 flex items-center justify-center">
-                <img 
-                  src={partner.logo} 
-                  alt={partner.name} 
-                  className={`h-12 w-auto object-contain max-w-[150px] ${
-                    partner.name === "PDC" ? "brightness-0" : ""
-                  }`}
-                  style={partner.name === "PDC" ? { filter: "brightness(0)" } : {}}
-                  loading="lazy"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Gradient Overlays */}
-        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-muted to-transparent pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-muted to-transparent pointer-events-none" />
+      {/* Animated Logo Columns */}
+      <div className="flex justify-center items-center gap-4 md:gap-6 px-4">
+        {logoSets.map((columnLogos, index) => (
+          <LogoColumn
+            key={index}
+            logos={columnLogos}
+            index={index}
+            currentTime={currentTime}
+          />
+        ))}
       </div>
     </section>
   );
