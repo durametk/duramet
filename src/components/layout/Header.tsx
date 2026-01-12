@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.jpg";
@@ -8,6 +8,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,14 +28,30 @@ const Header = () => {
     return location.pathname.startsWith(path);
   };
 
-  const handleNavClick = (path: string) => {
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, targetPath: string, hash: string) => {
+    e.preventDefault();
     setIsMenuOpen(false);
-    if (path.includes("#")) {
-      const element = document.getElementById(path.split("#")[1]);
+    
+    if (location.pathname === targetPath) {
+      // Already on the page, just scroll
+      const element = document.getElementById(hash);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
+    } else {
+      // Navigate to page first, then scroll after a delay
+      navigate(targetPath);
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
     }
+  };
+
+  const handleNavClick = (path: string) => {
+    setIsMenuOpen(false);
   };
 
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -81,7 +98,7 @@ const Header = () => {
               </Link>
             ))}
             <Button asChild variant="default" size="default">
-              <Link to="/#contact">Contact</Link>
+              <a href="/#contact" onClick={(e) => handleAnchorClick(e, "/", "contact")}>Contact</a>
             </Button>
           </nav>
 
@@ -118,9 +135,9 @@ const Header = () => {
                 </Link>
               ))}
               <Button asChild variant="default" size="lg" className="mt-2">
-                <Link to="/#contact" onClick={() => handleNavClick("/#contact")}>
+                <a href="/#contact" onClick={(e) => handleAnchorClick(e, "/", "contact")}>
                   Contact
-                </Link>
+                </a>
               </Button>
             </div>
           </nav>

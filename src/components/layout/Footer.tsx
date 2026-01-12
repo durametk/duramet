@@ -1,8 +1,32 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Mail, Phone, MapPin, Linkedin, Facebook, Twitter } from "lucide-react";
 import logo from "@/assets/logo.jpg";
 
 const Footer = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string, hash: string) => {
+    e.preventDefault();
+    
+    if (location.pathname === path) {
+      // Already on the page, just scroll
+      const element = document.getElementById(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      // Navigate to page first, then scroll after a delay
+      navigate(path);
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    }
+  };
+
   return (
     <footer className="bg-secondary text-secondary-foreground">
       <div className="container mx-auto px-4 py-16">
@@ -28,19 +52,31 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/industries" className="text-secondary-foreground/80 hover:text-accent transition-colors">
+                <a 
+                  href="/industries#industries-banner" 
+                  onClick={(e) => handleAnchorClick(e, "/industries", "industries-banner")}
+                  className="text-secondary-foreground/80 hover:text-accent transition-colors cursor-pointer"
+                >
                   Industries
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/#about" className="text-secondary-foreground/80 hover:text-accent transition-colors">
+                <a 
+                  href="/#about" 
+                  onClick={(e) => handleAnchorClick(e, "/", "about")}
+                  className="text-secondary-foreground/80 hover:text-accent transition-colors cursor-pointer"
+                >
                   About Us
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/#contact" className="text-secondary-foreground/80 hover:text-accent transition-colors">
+                <a 
+                  href="/#contact" 
+                  onClick={(e) => handleAnchorClick(e, "/", "contact")}
+                  className="text-secondary-foreground/80 hover:text-accent transition-colors cursor-pointer"
+                >
                   Contact
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
