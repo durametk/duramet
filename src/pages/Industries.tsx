@@ -32,9 +32,9 @@ const Industries = () => {
     <div className="min-h-screen">
       <Header />
       
-      <main className="pt-20">
+      <main className="pt-14">
         {/* Hero Section */}
-        <section className="py-20 gradient-dark">
+        <section id="industries-banner" className="py-32 md:py-40 gradient-dark">
           <div className="container mx-auto px-4 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
