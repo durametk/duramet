@@ -17,9 +17,9 @@ import { sendContactEmail } from "@/lib/email";
 
 import automotiveImg from "@/assets/industry-automotive.jpg";
 import aerospaceImg from "@/assets/industry-aerospace.jpg";
-import oilGasImg from "@/assets/industry-oil-gas.jpg";
 import powerImg from "@/assets/industry-power.jpg";
-import machineryImg from "@/assets/industry-heavy-machinery.jpg";
+import componentsImg from "@/assets/industry-components.jpg";
+import railImg from "@/assets/industry-rail.jpg";
 
 const iconMap: { [key: string]: React.ReactNode } = {
   car: <Car className="h-8 w-8" />,
@@ -33,8 +33,8 @@ const imageMap: { [key: string]: string } = {
   automotive: automotiveImg,
   "aerospace-defence": aerospaceImg,
   "power-industrial-automation": powerImg,
-  components: powerImg,
-  rail: powerImg,
+  components: componentsImg,
+  rail: railImg,
 };
 
 const enquirySchema = z.object({
@@ -345,7 +345,7 @@ const IndustryDetail = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-card rounded-xl p-6 shadow-lg border border-border hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                  className="bg-card rounded-xl p-6 shadow-lg border border-border hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full"
                 >
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                     <Package className="h-6 w-6 text-primary" />
@@ -353,13 +353,13 @@ const IndustryDetail = () => {
                   <h3 className="font-heading font-bold text-xl text-foreground mb-3">
                     {product.name}
                   </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-grow">
                     {product.description}
                   </p>
                   <Button
                     variant="outline"
                     size="default"
-                    className="w-full hover:bg-accent hover:text-accent-foreground hover:border-accent"
+                    className="w-full hover:bg-accent hover:text-accent-foreground hover:border-accent mt-auto"
                     onClick={() => setSelectedProduct(product)}
                   >
                     <Send className="h-4 w-4" />
@@ -374,7 +374,7 @@ const IndustryDetail = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: industry.products.length * 0.1 }}
-                className="bg-primary/5 rounded-xl p-6 shadow-lg border border-primary/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                className="bg-primary/5 rounded-xl p-6 shadow-lg border border-primary/20 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full"
               >
                 <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4">
                   <Package className="h-6 w-6 text-accent" />
@@ -382,13 +382,13 @@ const IndustryDetail = () => {
                 <h3 className="font-heading font-bold text-xl text-foreground mb-3">
                   Product Not Listed?
                 </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+                <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-grow">
                   Can't find what you're looking for? Tell us about your custom requirement and we'll help you source it.
                 </p>
                 <Button
                   variant="default"
                   size="default"
-                  className="w-full bg-accent hover:bg-accent/90"
+                  className="w-full bg-accent hover:bg-accent/90 mt-auto"
                   onClick={() => {
                     setSelectedProduct(null);
                     setIsProductNotListed(true);

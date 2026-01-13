@@ -1,8 +1,32 @@
-import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Linkedin, Facebook, Twitter } from "lucide-react";
-import logo from "@/assets/logo.jpg";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Mail, Phone, MapPin, Linkedin } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const Footer = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string, hash: string) => {
+    e.preventDefault();
+    
+    if (location.pathname === path) {
+      // Already on the page, just scroll
+      const element = document.getElementById(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      // Navigate to page first, then scroll after a delay
+      navigate(path);
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    }
+  };
+
   return (
     <footer className="bg-secondary text-secondary-foreground">
       <div className="container mx-auto px-4 py-16">
@@ -28,19 +52,31 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/industries" className="text-secondary-foreground/80 hover:text-accent transition-colors">
+                <a 
+                  href="/industries#industries-banner" 
+                  onClick={(e) => handleAnchorClick(e, "/industries", "industries-banner")}
+                  className="text-secondary-foreground/80 hover:text-accent transition-colors cursor-pointer"
+                >
                   Industries
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/#about" className="text-secondary-foreground/80 hover:text-accent transition-colors">
+                <a 
+                  href="/#about" 
+                  onClick={(e) => handleAnchorClick(e, "/", "about")}
+                  className="text-secondary-foreground/80 hover:text-accent transition-colors cursor-pointer"
+                >
                   About Us
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/#contact" className="text-secondary-foreground/80 hover:text-accent transition-colors">
+                <a 
+                  href="/#contact" 
+                  onClick={(e) => handleAnchorClick(e, "/", "contact")}
+                  className="text-secondary-foreground/80 hover:text-accent transition-colors cursor-pointer"
+                >
                   Contact
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
@@ -92,7 +128,7 @@ const Footer = () => {
           <h4 className="font-heading font-bold text-lg mb-6">Our Location</h4>
           <div className="rounded-lg overflow-hidden h-64 w-full">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.2772!2d77.6193!3d12.9526!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15c0d0a0b0a0%3A0x0!2sEjipura%2C%20Bengaluru%2C%20Karnataka%20560047!5e0!3m2!1sen!2sin!4v1234567890"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d486.6!2d77.6306659!3d12.9428844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1441d7dd0d31%3A0xad694a5c786b1577!2sMARUTI%20SUZUKI!5e0!3m2!1sen!2sin!4v1704980000000"
               width="100%"
               height="100%"
               style={{ border: 0 }}

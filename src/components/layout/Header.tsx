@@ -1,21 +1,35 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/logo.jpg";
+import logo from "@/assets/logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      
+      setIsScrolled(currentScrollY > 20);
+      
+      // Hide header when scrolling down, show when scrolling up
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsHidden(true);
+      } else {
+        setIsHidden(false);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -27,14 +41,30 @@ const Header = () => {
     return location.pathname.startsWith(path);
   };
 
-  const handleNavClick = (path: string) => {
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, targetPath: string, hash: string) => {
+    e.preventDefault();
     setIsMenuOpen(false);
-    if (path.includes("#")) {
-      const element = document.getElementById(path.split("#")[1]);
+    
+    if (location.pathname === targetPath) {
+      // Already on the page, just scroll
+      const element = document.getElementById(hash);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
+    } else {
+      // Navigate to page first, then scroll after a delay
+      navigate(targetPath);
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
     }
+  };
+
+  const handleNavClick = (path: string) => {
+    setIsMenuOpen(false);
   };
 
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -48,13 +78,15 @@ const Header = () => {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isHidden ? "-translate-y-full" : "translate-y-0"
+    } ${
       isScrolled 
         ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm" 
         : "bg-background/80 backdrop-blur-sm"
     }`}>
       <div className="container mx-auto px-4">
         <div className={`flex items-center justify-between transition-all duration-300 ${
-          isScrolled ? "h-16" : "h-20"
+          isScrolled ? "h-12" : "h-14"
         }`}>
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3" onClick={handleLogoClick}>
@@ -81,7 +113,7 @@ const Header = () => {
               </Link>
             ))}
             <Button asChild variant="default" size="default">
-              <Link to="/#contact">Contact</Link>
+              <a href="/#contact" onClick={(e) => handleAnchorClick(e, "/", "contact")}>Contact</a>
             </Button>
           </nav>
 
@@ -118,9 +150,9 @@ const Header = () => {
                 </Link>
               ))}
               <Button asChild variant="default" size="lg" className="mt-2">
-                <Link to="/#contact" onClick={() => handleNavClick("/#contact")}>
+                <a href="/#contact" onClick={(e) => handleAnchorClick(e, "/", "contact")}>
                   Contact
-                </Link>
+                </a>
               </Button>
             </div>
           </nav>
