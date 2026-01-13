@@ -34,7 +34,7 @@ app.post('/api/send-email', async (req, res) => {
 
     // Resend test mode only allows sending to account owner's email
     // Change this after verifying a domain in Resend
-    const recipientEmail = to_email || 'aniketcoolshe@gmail.com';
+    const recipientEmail = to_email || 'sales@duramettechnologies.com';
 
     // Send email to company
     const { data, error } = await resend.emails.send({

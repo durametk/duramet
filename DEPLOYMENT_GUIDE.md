@@ -90,14 +90,14 @@ After deployment, you can:
 
 1. Deploy your site
 2. Test the contact form
-3. Check that emails are received at `aniketcoolshe@gmail.com`
+3. Check that emails are received at `sales@duramettechnologies.com`
 4. Verify auto-reply emails are sent to users
 
 ## Important Notes
 
 ### Resend Test Mode
 - Currently, Resend is in test mode
-- Can only send to: `aniketcoolshe@gmail.com`
+- Can only send to: `sales@duramettechnologies.com`
 - To send to other emails, verify a domain in Resend dashboard
 
 ### Environment Variables

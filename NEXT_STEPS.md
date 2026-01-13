@@ -37,7 +37,7 @@ After redeploying, check the deploy log:
 1. Visit your live site: `https://lucky-kashata-dab567.netlify.app`
 2. Go to the Contact section
 3. Fill out the form and submit
-4. Check if you receive the email at `aniketcoolshe@gmail.com`
+4. Check if you receive the email at `sales@duramettechnologies.com`
 
 ## Step 5: Check Function Logs (If Issues)
 

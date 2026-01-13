@@ -45,7 +45,7 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
     }
 
     // Resend test mode only allows sending to account owner's email
-    const recipientEmail = to_email || "aniketcoolshe@gmail.com";
+    const recipientEmail = to_email || "sales@duramettechnologies.com";
 
     // Send email to company
     const { data, error } = await resend.emails.send({
