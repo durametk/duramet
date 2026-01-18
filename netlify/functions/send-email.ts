@@ -2,7 +2,7 @@
 import { Resend } from "resend";
 import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 
-const resend = new Resend(process.env.RESEND_API_KEY || "re_HRy7egPF_pBKnUwmUBmFybZ31UunB8j2V");
+const resend = new Resend(process.env.RESEND_API_KEY || "re_2dz3tHHJ_HGwXiSLcCfR924BFyk8TqFit");
 
 export const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
   // Handle CORS
