@@ -36,7 +36,7 @@ export default async function handler(req: any, res: any) {
 
     // Send email to company
     const { data, error } = await resend.emails.send({
-      from: "Duramet Technologies <onboarding@resend.dev>", // Update with your verified domain
+      from: "Duramet Technologies <noreply@duramettechnologies.com>", // Using verified domain
       to: [recipientEmail],
       replyTo: email,
       subject: `New Enquiry from ${name} - ${industry}`,
@@ -77,7 +77,7 @@ export default async function handler(req: any, res: any) {
     // Send auto-reply to user
     try {
       await resend.emails.send({
-        from: "Duramet Technologies <onboarding@resend.dev>",
+        from: "Duramet Technologies <noreply@duramettechnologies.com>",
         to: [email],
         subject: "Thank you for your enquiry - Duramet Technologies",
         html: `

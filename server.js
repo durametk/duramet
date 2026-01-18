@@ -38,7 +38,7 @@ app.post('/api/send-email', async (req, res) => {
 
     // Send email to company
     const { data, error } = await resend.emails.send({
-      from: 'Duramet Technologies <onboarding@resend.dev>',
+      from: 'Duramet Technologies <noreply@duramettechnologies.com>',
       to: [recipientEmail],
       replyTo: email,
       subject: `New Enquiry from ${name} - ${industry}`,
@@ -79,7 +79,7 @@ app.post('/api/send-email', async (req, res) => {
     // Send auto-reply to user
     try {
       await resend.emails.send({
-        from: 'Duramet Technologies <onboarding@resend.dev>',
+        from: 'Duramet Technologies <noreply@duramettechnologies.com>',
         to: [email],
         subject: 'Thank you for your enquiry - Duramet Technologies',
         html: `
