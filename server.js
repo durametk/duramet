@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Resend API Key - Use environment variable or fallback
-const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_2dz3tHHJ_HGwXiSLcCfR924BFyk8TqFit';
+const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_Wz5buHio_4diMFr7nDkwBRSGfy31kqi4b';
 const resend = new Resend(RESEND_API_KEY);
 
 // Middleware
