@@ -82,14 +82,28 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
     });
 
     if (error) {
-      console.error("Resend error:", error);
+      console.error("Resend error:", JSON.stringify(error, null, 2));
+      console.error("API Key used:", process.env.RESEND_API_KEY ? "from env" : "hardcoded fallback");
+      console.error("From email:", fromEmail);
+      
+      // Better error message
+      let errorMessage = error.message || "Failed to send email";
+      if (error.message && error.message.includes("domain is not verified")) {
+        errorMessage = `Domain verification issue. API Key: ${process.env.RESEND_API_KEY ? "Using env var" : "Using hardcoded: re_2dz3tHHJ..."}. Please verify the API key matches the Resend account where duramettechnologies.com is verified.`;
+      }
+      
       return {
         statusCode: 400,
         headers,
         body: JSON.stringify({
           success: false,
-          message: error.message || "Failed to send email",
+          message: errorMessage,
           error: error,
+          debug: {
+            apiKeySource: process.env.RESEND_API_KEY ? "environment" : "hardcoded",
+            fromEmail: fromEmail,
+            domain: "duramettechnologies.com"
+          }
         }),
       };
     }
