@@ -30,3 +30,7 @@
     Access-Control-Allow-Methods = "GET, POST, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type"
 
+# Netlify Forms configuration
+# Forms will automatically send emails to the email specified in the _to hidden field
+# Configure email notifications in Netlify Dashboard → Forms → Form notifications
+

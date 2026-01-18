@@ -36,9 +36,15 @@ app.post('/api/send-email', async (req, res) => {
     // Change this after verifying a domain in Resend
     const recipientEmail = to_email || 'sales@duramettechnologies.com';
 
+    // TEMPORARY: Use test email until domain is verified
+    // Once domain is verified in Resend, change back to: noreply@duramettechnologies.com
+    const fromEmail = process.env.USE_VERIFIED_DOMAIN === 'true' 
+      ? 'Duramet Technologies <noreply@duramettechnologies.com>'
+      : 'Duramet Technologies <onboarding@resend.dev>'; // Temporary test email
+
     // Send email to company
     const { data, error } = await resend.emails.send({
-      from: 'Duramet Technologies <noreply@duramettechnologies.com>',
+      from: fromEmail,
       to: [recipientEmail],
       replyTo: email,
       subject: `New Enquiry from ${name} - ${industry}`,
@@ -79,7 +85,7 @@ app.post('/api/send-email', async (req, res) => {
     // Send auto-reply to user
     try {
       await resend.emails.send({
-        from: 'Duramet Technologies <noreply@duramettechnologies.com>',
+        from: fromEmail,
         to: [email],
         subject: 'Thank you for your enquiry - Duramet Technologies',
         html: `

@@ -72,14 +72,25 @@ const EnquiryForm = ({ industry, product, isProductNotListed, onClose }: Enquiry
 
   const onSubmit = async (data: EnquiryFormData) => {
     try {
-      await sendContactEmail({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        requirement: data.requirement,
-        industry: industry.name,
-        product: isProductNotListed ? "Product Not Listed" : product?.name,
+      // Use Netlify Forms - no API needed!
+      const formData = new FormData();
+      formData.append('form-name', 'product-enquiry');
+      formData.append('name', data.name);
+      formData.append('email', data.email);
+      formData.append('phone', data.phone);
+      formData.append('requirement', data.requirement);
+      formData.append('industry', industry.name);
+      formData.append('product', isProductNotListed ? "Product Not Listed" : product?.name || "");
+
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData as any).toString(),
       });
+
+      if (!response.ok) {
+        throw new Error('Form submission failed');
+      }
       
       toast({
         title: "Enquiry Submitted!",
@@ -88,7 +99,7 @@ const EnquiryForm = ({ industry, product, isProductNotListed, onClose }: Enquiry
 
       onClose();
     } catch (error: any) {
-      console.error("Email Error:", error);
+      console.error("Form Error:", error);
       const errorMessage = error?.message || "Please try again.";
       toast({
         title: "Submission Failed",
@@ -132,7 +143,18 @@ const EnquiryForm = ({ industry, product, isProductNotListed, onClose }: Enquiry
           )}
         </p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form 
+          name="product-enquiry" 
+          method="POST" 
+          data-netlify="true" 
+          netlify-honeypot="bot-field"
+          onSubmit={handleSubmit(onSubmit)} 
+          className="space-y-4"
+        >
+          {/* Hidden fields for Netlify Forms */}
+          <input type="hidden" name="form-name" value="product-enquiry" />
+          <input type="hidden" name="bot-field" />
+          <input type="hidden" name="_to" value="sales@duramettechnologies.com" />
           <div>
             <Label htmlFor="name">Full Name *</Label>
             <Input

@@ -56,14 +56,27 @@ const ContactSection = ({ prefilledIndustry, prefilledProduct, isProductNotListe
 
   const onSubmit = async (data: ContactFormData) => {
     try {
-      await sendContactEmail({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        industry: data.industry,
-        requirement: data.requirement,
-        product: prefilledProduct,
+      // Use Netlify Forms - no API needed!
+      const formData = new FormData();
+      formData.append('form-name', 'contact-form');
+      formData.append('name', data.name);
+      formData.append('email', data.email);
+      formData.append('phone', data.phone);
+      formData.append('industry', data.industry);
+      formData.append('requirement', data.requirement);
+      if (prefilledProduct) {
+        formData.append('product', prefilledProduct);
+      }
+
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData as any).toString(),
       });
+
+      if (!response.ok) {
+        throw new Error('Form submission failed');
+      }
       
       toast({
         title: "Enquiry Submitted Successfully!",
@@ -78,7 +91,7 @@ const ContactSection = ({ prefilledIndustry, prefilledProduct, isProductNotListe
         requirement: "",
       });
     } catch (error: any) {
-      console.error("Email Error:", error);
+      console.error("Form Error:", error);
       const errorMessage = error?.message || "Please try again or contact us directly.";
       toast({
         title: "Submission Failed",
@@ -173,7 +186,20 @@ const ContactSection = ({ prefilledIndustry, prefilledProduct, isProductNotListe
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <form onSubmit={handleSubmit(onSubmit)} className="bg-card rounded-xl p-8 shadow-xl border border-border">
+            <form 
+              name="contact-form" 
+              method="POST" 
+              data-netlify="true" 
+              netlify-honeypot="bot-field"
+              onSubmit={handleSubmit(onSubmit)} 
+              className="bg-card rounded-xl p-8 shadow-xl border border-border"
+            >
+              {/* Hidden field for Netlify Forms */}
+              <input type="hidden" name="form-name" value="contact-form" />
+              {/* Honeypot field for spam protection */}
+              <input type="hidden" name="bot-field" />
+              {/* Hidden field to set recipient email */}
+              <input type="hidden" name="_to" value="sales@duramettechnologies.com" />
               <h3 className="font-heading font-bold text-2xl text-foreground mb-6">
                 {prefilledProduct ? "Product Enquiry" : "Send Us a Message"}
               </h3>
