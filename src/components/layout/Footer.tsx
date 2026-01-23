@@ -152,7 +152,7 @@ const Footer = () => {
 
             {/* Click-anywhere overlay (opens Google Maps) */}
             <a
-              href="https://www.google.com/maps?q=12.9428844,77.6306659"
+              href="https://www.google.com/maps/place/MARUTI+SUZUKI,+Ejipura,+Bengaluru,+Karnataka+560047/data=!4m2!3m1!1s0x3bae1441d7dd0d31:0xad694a5c786b1577!17m2!4m1!1e3!18m1!1e1?utm_source=mstt_1&entry=gps&coh=192189&g_ep=CAESBzI2LjIuMjUYACCenQoqdSw5NDI2NzcyNyw5NDI3NTQwNyw5NDI5MjE5NSw5NDI5OTUzMiw5NDI4NDQ2Myw5NDI4MDU3Niw5NDIwNzM5NCw5NDIwNzUwNiw5NDIwODUwNiw5NDIxODY1Myw5NDIyOTgzOSw5NDI3NTE2OCw5NDI3OTYxOUICSU4%3D&skid=c4000927-7d00-4999-adc4-c7dfed54d645"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Open location in Google Maps"
