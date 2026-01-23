@@ -148,6 +148,7 @@ const Footer = () => {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Duramet Technologies Location"
+              className="pointer-events-none"
             ></iframe>
 
             {/* Click-anywhere overlay (opens Google Maps) */}
@@ -156,7 +157,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Open location in Google Maps"
-              className="absolute inset-0 cursor-pointer"
+              className="absolute inset-0 z-10 cursor-pointer"
             />
           </div>
         </div>
