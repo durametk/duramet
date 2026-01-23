@@ -74,6 +74,7 @@ Your Duramet Technologies website is hosted using the following infrastructure:
 - The `RESEND_API_KEY` environment variable is critical for email functionality
 - Deleting or changing it will break contact form emails
 - Only modify if you have a new valid API key from Resend
+- **See `SETUP_ENVIRONMENT_VARIABLES.md` for detailed setup instructions**
 
 ### ❌ **DO NOT Commit Sensitive Information**
 
@@ -203,6 +204,10 @@ Contact your developer immediately if:
 - **GitHub Repository**: (Your private repo URL)
 - **Resend Dashboard**: https://resend.com
 - **GoDaddy DNS**: (Your GoDaddy account)
+
+### Important Documentation:
+- **`CLIENT_PRECAUTIONS.md`** - This file (precautions and hosting info)
+- **`SETUP_ENVIRONMENT_VARIABLES.md`** - Guide for setting up environment variables in Netlify
 
 ### Commands:
 - `npm run dev` - Test website locally
