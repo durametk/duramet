@@ -207,7 +207,7 @@ const ContactSection = ({ prefilledIndustry, prefilledProduct, isProductNotListe
                     <Input
                       id="phone"
                       type="tel"
-                      placeholder="+91 XXXXX XXXXX"
+                      placeholder="Enter your phone number"
                       {...register("phone")}
                       className={errors.phone ? "border-destructive" : ""}
                     />
