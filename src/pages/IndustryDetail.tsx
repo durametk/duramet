@@ -40,7 +40,19 @@ const imageMap: { [key: string]: string } = {
 const enquirySchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
   email: z.string().trim().email("Please enter a valid email").max(255),
-  phone: z.string().trim().min(10, "Please enter a valid phone number").max(20),
+  phone: z
+    .string()
+    .trim()
+    .min(7, "Please enter a valid phone number")
+    .max(25, "Phone number is too long")
+    .refine(
+      (val) => {
+        // allow +, digits, spaces, hyphens, parentheses; require at least 7 digits total
+        const cleaned = val.replace(/[^\d]/g, "");
+        return /^[+\d\s()-]+$/.test(val) && cleaned.length >= 7;
+      },
+      "Please enter a valid phone number (include country code if applicable)"
+    ),
   requirement: z.string().trim().min(10, "Please describe your requirement").max(1000),
 });
 
@@ -161,7 +173,7 @@ const EnquiryForm = ({ industry, product, isProductNotListed, onClose }: Enquiry
               <Input
                 id="phone"
                 type="tel"
-                placeholder="+91 XXXXX XXXXX"
+                placeholder="+<country code> <number> (e.g. +44 20 1234 5678)"
                 {...register("phone")}
                 className={errors.phone ? "border-destructive" : ""}
               />

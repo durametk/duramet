@@ -15,7 +15,19 @@ import { sendContactEmail } from "@/lib/email";
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
   email: z.string().trim().email("Please enter a valid email").max(255, "Email must be less than 255 characters"),
-  phone: z.string().trim().min(10, "Please enter a valid phone number").max(20, "Phone number is too long"),
+  phone: z
+    .string()
+    .trim()
+    .min(7, "Please enter a valid phone number")
+    .max(25, "Phone number is too long")
+    .refine(
+      (val) => {
+        // allow +, digits, spaces, hyphens, parentheses; require at least 7 digits total
+        const cleaned = val.replace(/[^\d]/g, "");
+        return /^[+\d\s()-]+$/.test(val) && cleaned.length >= 7;
+      },
+      "Please enter a valid phone number (include country code if applicable)"
+    ),
   industry: z.string().min(1, "Please select an industry"),
   requirement: z.string().trim().min(10, "Please describe your requirement (at least 10 characters)").max(1000, "Requirement must be less than 1000 characters"),
 });
@@ -207,7 +219,7 @@ const ContactSection = ({ prefilledIndustry, prefilledProduct, isProductNotListe
                     <Input
                       id="phone"
                       type="tel"
-                      placeholder="Enter your phone number"
+                      placeholder="+<country code> <number> (e.g. +1 555 123 4567)"
                       {...register("phone")}
                       className={errors.phone ? "border-destructive" : ""}
                     />
