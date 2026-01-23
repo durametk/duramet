@@ -6,7 +6,7 @@ Professional website for Duramet Technologies - Industrial components and soluti
 
 - **Frontend**: React + TypeScript + Vite
 - **Styling**: Tailwind CSS + shadcn/ui
-- **Hosting**: Netlify
+- **Hosting**: Vercel
 - **DNS**: GoDaddy
 - **Email Service**: Resend API
 
@@ -36,14 +36,15 @@ npm run build
 ## 📦 Deployment
 
 1. Push to GitHub (private repo)
-2. Netlify auto-deploys from GitHub
-3. Forms work automatically via Netlify Functions
+2. Vercel auto-deploys from GitHub
+3. Forms work automatically via Vercel Serverless Functions
 
 ## 🔧 Configuration
 
-- **Email API**: `netlify/functions/send-email.ts`
+- **Email API**: `api/send-email.ts` (Vercel Serverless Function)
 - **Email Recipient**: `karthik.ramesh@duramettechnologies.com`
 - **From Address**: `noreply@duramettechnologies.com`
+- **Environment Variable**: `RESEND_API_KEY` (set in Vercel Dashboard)
 
 ## 📝 License
 
