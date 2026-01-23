@@ -6,10 +6,11 @@ const partnerLogos = [
   { name: "PDC", img: "/logo/pdc.jpg" },
   { name: "Henkel", img: "/logo/Henkel-Logo.svg" },
   { name: "3M", img: "/logo/3m-2.svg" },
-  { name: "Walsin", img: "/logo/Walsin-logo-1140x570.jpg_1.svg" },
-  { name: "Kamaya", img: "/logo/Kamaya_600x600_1.svg" },
-  { name: "Frontier", img: "/logo/Frontier_communications_logo_2023.svg" },
-  { name: "Nitsuku", img: "/logo/nisstuko1.svg" },
+  // Some SVGs have extra whitespace in their viewBox; apply a small scale bump so they visually match.
+  { name: "Walsin", img: "/logo/Walsin-logo-1140x570.jpg_1.svg", imgClassName: "scale-125" },
+  { name: "Kamaya", img: "/logo/Kamaya_600x600_1.svg", imgClassName: "h-14 max-w-full scale-[1.9]" },
+  { name: "Frontier", img: "/logo/Frontier_communications_logo_2023.svg", imgClassName: "h-14 max-w-full scale-[1.7]" },
+  { name: "Nitsuku", img: "/logo/nisstuko1.svg", imgClassName: "scale-150" },
 ];
 
 const PartnersCarousel = () => {
@@ -42,7 +43,7 @@ const PartnersCarousel = () => {
             <img
               src={logo.img}
               alt={logo.name}
-              className="h-12 w-auto max-h-[60%] max-w-[80%] object-contain"
+              className={`h-12 w-auto max-h-[60%] max-w-[90%] object-contain origin-center ${logo.imgClassName ?? ""}`}
             />
           </div>
         ))}
