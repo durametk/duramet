@@ -8,9 +8,9 @@ const partnerLogos = [
   { name: "3M", img: "/logo/3m-2.svg" },
   // Some SVGs have extra whitespace in their viewBox; apply a small scale bump so they visually match.
   { name: "Walsin", img: "/logo/Walsin-logo-1140x570.jpg_1.svg", imgClassName: "scale-125" },
-  { name: "Kamaya", img: "/logo/Kamaya_600x600_1.svg", imgClassName: "scale-125" },
-  { name: "Frontier", img: "/logo/Frontier_communications_logo_2023.svg", imgClassName: "scale-110" },
-  { name: "Nitsuku", img: "/logo/nisstuko1.svg", imgClassName: "scale-125" },
+  { name: "Kamaya", img: "/logo/Kamaya_600x600_1.svg", imgClassName: "scale-150" },
+  { name: "Frontier", img: "/logo/Frontier_communications_logo_2023.svg", imgClassName: "scale-140" },
+  { name: "Nitsuku", img: "/logo/nisstuko1.svg", imgClassName: "scale-150" },
 ];
 
 const PartnersCarousel = () => {
@@ -43,7 +43,7 @@ const PartnersCarousel = () => {
             <img
               src={logo.img}
               alt={logo.name}
-              className={`h-12 w-auto max-h-[60%] max-w-[80%] object-contain origin-center ${logo.imgClassName ?? ""}`}
+              className={`h-12 w-auto max-h-[60%] max-w-[90%] object-contain origin-center ${logo.imgClassName ?? ""}`}
             />
           </div>
         ))}
