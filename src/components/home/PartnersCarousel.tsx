@@ -3,7 +3,7 @@ import { InfiniteSlider } from "@/components/ui/infinite-slider";
 
 // Partner logos - using public folder paths
 const partnerLogos = [
-  { name: "PDC", img: "/logo/pdc.jpg" },
+  { name: "PDC Prosperity", img: "/logo/PDC_Prosperity.svg", imgClassName: "scale-125" },
   { name: "Henkel", img: "/logo/Henkel-Logo.svg" },
   { name: "3M", img: "/logo/3m-2.svg" },
   // Some SVGs have extra whitespace in their viewBox; apply a small scale bump so they visually match.
