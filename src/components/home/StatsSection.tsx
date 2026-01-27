@@ -10,10 +10,10 @@ interface StatItem {
 }
 
 const stats: StatItem[] = [
-  { icon: <Factory className="h-8 w-8" />, endValue: 50, suffix: "+", label: "Industry Partners" },
-  { icon: <Users className="h-8 w-8" />, endValue: 100, suffix: "+", label: "Happy Clients" },
-  { icon: <Globe className="h-8 w-8" />, endValue: 15, suffix: "+", label: "Countries Served" },
   { icon: <Award className="h-8 w-8" />, endValue: 500, suffix: "+", label: "Products Delivered" },
+  { icon: <Globe className="h-8 w-8" />, endValue: 3, suffix: "+", label: "Countries Served" },
+  { icon: <Users className="h-8 w-8" />, endValue: 30, suffix: "+", label: "Happy Clients" },
+  { icon: <Factory className="h-8 w-8" />, endValue: 10, suffix: "+", label: "Industry Partners" },
 ];
 
 const AnimatedCounter = ({ endValue, suffix, inView }: { endValue: number; suffix: string; inView: boolean }) => {
