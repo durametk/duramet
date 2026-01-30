@@ -140,7 +140,7 @@ const Footer = () => {
           <h4 className="font-heading font-bold text-lg mb-6">Our Location</h4>
           <div className="rounded-lg overflow-hidden h-64 w-full relative">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.452294955299!2d77.6306659!3d12.9428844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1441d7dd0d31%3A0xad694a5c786b1577!2sMARUTI%20SUZUKI!5e0!3m2!1sen!2sin!4v1769149053929!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.450651229667!2d77.62797747491783!3d12.942989787369791!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1500468cac7f%3A0x7c2dc78ac8cc16de!2sDuramet%20Technologies!5e0!3m2!1sen!2sin!4v1769789598464!5m2!1sen!2sin"
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -153,7 +153,7 @@ const Footer = () => {
 
             {/* Click-anywhere overlay (opens Google Maps) */}
             <a
-              href="https://www.google.com/maps/place/MARUTI+SUZUKI,+Ejipura,+Bengaluru,+Karnataka+560047/data=!4m2!3m1!1s0x3bae1441d7dd0d31:0xad694a5c786b1577!17m2!4m1!1e3!18m1!1e1?utm_source=mstt_1&entry=gps&coh=192189&g_ep=CAESBzI2LjIuMjUYACCenQoqdSw5NDI2NzcyNyw5NDI3NTQwNyw5NDI5MjE5NSw5NDI5OTUzMiw5NDI4NDQ2Myw5NDI4MDU3Niw5NDIwNzM5NCw5NDIwNzUwNiw5NDIwODUwNiw5NDIxODY1Myw5NDIyOTgzOSw5NDI3NTE2OCw5NDI3OTYxOUICSU4%3D&skid=c4000927-7d00-4999-adc4-c7dfed54d645"
+              href="https://www.google.com/maps/place/Duramet+Technologies/@12.9429898,77.6279775,17z"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Open location in Google Maps"
