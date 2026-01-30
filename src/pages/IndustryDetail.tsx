@@ -14,6 +14,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { sendContactEmail } from "@/lib/email";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Controller } from "react-hook-form";
 
 import automotiveImg from "@/assets/industry-automotive.jpg";
 import aerospaceImg from "@/assets/industry-aerospace.jpg";
@@ -37,6 +39,17 @@ const imageMap: { [key: string]: string } = {
   rail: railImg,
 };
 
+const countries = [
+  "India", "United States", "United Kingdom", "Germany", "France", "Italy", "Spain", 
+  "Canada", "Australia", "Japan", "China", "South Korea", "Singapore", "Malaysia",
+  "Thailand", "Indonesia", "Vietnam", "Philippines", "United Arab Emirates", "Saudi Arabia",
+  "Qatar", "Kuwait", "Bahrain", "Oman", "Israel", "Turkey", "Russia", "Brazil", "Mexico",
+  "Argentina", "Chile", "Colombia", "South Africa", "Nigeria", "Egypt", "Kenya",
+  "Netherlands", "Belgium", "Switzerland", "Austria", "Sweden", "Norway", "Denmark",
+  "Finland", "Poland", "Czech Republic", "Hungary", "Ireland", "Portugal", "Greece",
+  "New Zealand", "Bangladesh", "Pakistan", "Sri Lanka", "Nepal", "Other"
+];
+
 const enquirySchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
   email: z.string().trim().email("Please enter a valid email").max(255),
@@ -53,6 +66,7 @@ const enquirySchema = z.object({
       },
       "Please enter a valid phone number (include country code if applicable)"
     ),
+  country: z.string().min(1, "Please select a country"),
   requirement: z.string().trim().min(10, "Please describe your requirement").max(1000),
 });
 
@@ -71,6 +85,7 @@ const EnquiryForm = ({ industry, product, isProductNotListed, onClose }: Enquiry
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<EnquiryFormData>({
     resolver: zodResolver(enquirySchema),
@@ -78,6 +93,7 @@ const EnquiryForm = ({ industry, product, isProductNotListed, onClose }: Enquiry
       name: "",
       email: "",
       phone: "",
+      country: "",
       requirement: "",
     },
   });
@@ -88,6 +104,7 @@ const EnquiryForm = ({ industry, product, isProductNotListed, onClose }: Enquiry
         name: data.name,
         email: data.email,
         phone: data.phone,
+        country: data.country,
         requirement: data.requirement,
         industry: industry.name,
         product: isProductNotListed ? "Product Not Listed" : product?.name,
@@ -179,6 +196,29 @@ const EnquiryForm = ({ industry, product, isProductNotListed, onClose }: Enquiry
               />
               {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone.message}</p>}
             </div>
+          </div>
+
+          <div>
+            <Label htmlFor="country">Country *</Label>
+            <Controller
+              name="country"
+              control={control}
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className={errors.country ? "border-destructive" : ""}>
+                    <SelectValue placeholder="Select your country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {countries.map((country) => (
+                      <SelectItem key={country} value={country}>
+                        {country}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {errors.country && <p className="text-destructive text-sm mt-1">{errors.country.message}</p>}
           </div>
 
           <div>

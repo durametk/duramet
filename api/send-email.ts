@@ -20,13 +20,13 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { name, email, phone, industry, product, requirement, to_email } = req.body;
+    const { name, email, phone, country, industry, product, requirement, to_email } = req.body;
 
     // Validate required fields
-    if (!name || !email || !phone || !industry || !requirement) {
+    if (!name || !email || !phone || !country || !industry || !requirement) {
       return res.status(400).json({ 
         success: false,
-        message: "Missing required fields: name, email, phone, industry, and requirement are required" 
+        message: "Missing required fields: name, email, phone, country, industry, and requirement are required" 
       });
     }
 
@@ -51,6 +51,7 @@ export default async function handler(req: any, res: any) {
             <p style="margin: 10px 0;"><strong>Name:</strong> ${name}</p>
             <p style="margin: 10px 0;"><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
             <p style="margin: 10px 0;"><strong>Phone:</strong> <a href="tel:${phone}">${phone}</a></p>
+            <p style="margin: 10px 0;"><strong>Country:</strong> ${country}</p>
             <p style="margin: 10px 0;"><strong>Industry:</strong> ${industry}</p>
             <p style="margin: 10px 0;"><strong>Product:</strong> ${product || "N/A"}</p>
           </div>
