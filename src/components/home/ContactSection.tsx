@@ -12,6 +12,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { sendContactEmail } from "@/lib/email";
 
+const countries = [
+  "India", "United States", "United Kingdom", "Germany", "France", "Italy", "Spain", 
+  "Canada", "Australia", "Japan", "China", "South Korea", "Singapore", "Malaysia",
+  "Thailand", "Indonesia", "Vietnam", "Philippines", "United Arab Emirates", "Saudi Arabia",
+  "Qatar", "Kuwait", "Bahrain", "Oman", "Israel", "Turkey", "Russia", "Brazil", "Mexico",
+  "Argentina", "Chile", "Colombia", "South Africa", "Nigeria", "Egypt", "Kenya",
+  "Netherlands", "Belgium", "Switzerland", "Austria", "Sweden", "Norway", "Denmark",
+  "Finland", "Poland", "Czech Republic", "Hungary", "Ireland", "Portugal", "Greece",
+  "New Zealand", "Bangladesh", "Pakistan", "Sri Lanka", "Nepal", "Other"
+];
+
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
   email: z.string().trim().email("Please enter a valid email").max(255, "Email must be less than 255 characters"),
@@ -28,6 +39,7 @@ const contactSchema = z.object({
       },
       "Please enter a valid phone number (include country code if applicable)"
     ),
+  country: z.string().min(1, "Please select a country"),
   industry: z.string().min(1, "Please select an industry"),
   requirement: z.string().trim().min(10, "Please describe your requirement (at least 10 characters)").max(1000, "Requirement must be less than 1000 characters"),
 });
@@ -61,6 +73,7 @@ const ContactSection = ({ prefilledIndustry, prefilledProduct, isProductNotListe
       name: "",
       email: "",
       phone: "",
+      country: "",
       industry: prefilledIndustry || "",
       requirement: defaultRequirement,
     },
@@ -72,6 +85,7 @@ const ContactSection = ({ prefilledIndustry, prefilledProduct, isProductNotListe
         name: data.name,
         email: data.email,
         phone: data.phone,
+        country: data.country,
         industry: data.industry,
         requirement: data.requirement,
         product: prefilledProduct,
@@ -86,6 +100,7 @@ const ContactSection = ({ prefilledIndustry, prefilledProduct, isProductNotListe
         name: "",
         email: "",
         phone: "",
+        country: "",
         industry: prefilledIndustry || "",
         requirement: "",
       });
@@ -225,6 +240,29 @@ const ContactSection = ({ prefilledIndustry, prefilledProduct, isProductNotListe
                     />
                     {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone.message}</p>}
                   </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="country">Country *</Label>
+                  <Controller
+                    name="country"
+                    control={control}
+                    render={({ field }) => (
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <SelectTrigger className={errors.country ? "border-destructive" : ""}>
+                          <SelectValue placeholder="Select your country" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {countries.map((country) => (
+                            <SelectItem key={country} value={country}>
+                              {country}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  {errors.country && <p className="text-destructive text-sm mt-1">{errors.country.message}</p>}
                 </div>
 
                 <div>

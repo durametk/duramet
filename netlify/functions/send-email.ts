@@ -30,16 +30,16 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
 
   try {
     const body = JSON.parse(event.body || "{}");
-    const { name, email, phone, industry, product, requirement, to_email } = body;
+    const { name, email, phone, country, industry, product, requirement, to_email } = body;
 
     // Validate required fields
-    if (!name || !email || !phone || !industry || !requirement) {
+    if (!name || !email || !phone || !country || !industry || !requirement) {
       return {
         statusCode: 400,
         headers,
         body: JSON.stringify({
           success: false,
-          message: "Missing required fields: name, email, phone, industry, and requirement are required",
+          message: "Missing required fields: name, email, phone, country, industry, and requirement are required",
         }),
       };
     }
@@ -65,6 +65,7 @@ export const handler: Handler = async (event: HandlerEvent, context: HandlerCont
             <p style="margin: 10px 0;"><strong>Name:</strong> ${name}</p>
             <p style="margin: 10px 0;"><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
             <p style="margin: 10px 0;"><strong>Phone:</strong> <a href="tel:${phone}">${phone}</a></p>
+            <p style="margin: 10px 0;"><strong>Country:</strong> ${country}</p>
             <p style="margin: 10px 0;"><strong>Industry:</strong> ${industry}</p>
             <p style="margin: 10px 0;"><strong>Product:</strong> ${product || "N/A"}</p>
           </div>
