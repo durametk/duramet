@@ -16,6 +16,7 @@ import { z } from "zod";
 import { sendContactEmail } from "@/lib/email";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Controller } from "react-hook-form";
+import { countryCodes } from "@/lib/country-codes";
 
 import automotiveImg from "@/assets/industry-automotive.jpg";
 import aerospaceImg from "@/assets/industry-aerospace.jpg";
@@ -53,18 +54,19 @@ const countries = [
 const enquirySchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
   email: z.string().trim().email("Please enter a valid email").max(255),
-  phone: z
+  countryCode: z.string().min(1, "Please select a country code"),
+  phoneNumber: z
     .string()
     .trim()
     .min(7, "Please enter a valid phone number")
-    .max(25, "Phone number is too long")
+    .max(20, "Phone number is too long")
     .refine(
       (val) => {
-        // allow +, digits, spaces, hyphens, parentheses; require at least 7 digits total
+        // allow digits, spaces, hyphens, parentheses; require at least 7 digits total
         const cleaned = val.replace(/[^\d]/g, "");
-        return /^[+\d\s()-]+$/.test(val) && cleaned.length >= 7;
+        return /^[\d\s()-]+$/.test(val) && cleaned.length >= 7;
       },
-      "Please enter a valid phone number (include country code if applicable)"
+      "Please enter a valid phone number"
     ),
   country: z.string().min(1, "Please select a country"),
   requirement: z.string().trim().min(10, "Please describe your requirement").max(1000),
@@ -86,24 +88,33 @@ const EnquiryForm = ({ industry, product, isProductNotListed, onClose }: Enquiry
     register,
     handleSubmit,
     control,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<EnquiryFormData>({
     resolver: zodResolver(enquirySchema),
     defaultValues: {
       name: "",
       email: "",
-      phone: "",
+      countryCode: "+91", // Default to India
+      phoneNumber: "",
       country: "",
       requirement: "",
     },
   });
 
+  const countryCode = watch("countryCode");
+  const phoneNumber = watch("phoneNumber");
+
   const onSubmit = async (data: EnquiryFormData) => {
     try {
+      // Combine country code and phone number
+      const fullPhoneNumber = `${data.countryCode} ${data.phoneNumber}`.trim();
+      
       await sendContactEmail({
         name: data.name,
         email: data.email,
-        phone: data.phone,
+        phone: fullPhoneNumber,
         country: data.country,
         requirement: data.requirement,
         industry: industry.name,
@@ -187,14 +198,42 @@ const EnquiryForm = ({ industry, product, isProductNotListed, onClose }: Enquiry
             </div>
             <div>
               <Label htmlFor="phone">Phone *</Label>
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="+<country code> <number> (e.g. +44 20 1234 5678)"
-                {...register("phone")}
-                className={errors.phone ? "border-destructive" : ""}
+              <Controller
+                name="countryCode"
+                control={control}
+                render={({ field }) => (
+                  <div className="flex gap-2">
+                    <Select value={field.value} onValueChange={(value) => {
+                      field.onChange(value);
+                      setValue("countryCode", value);
+                    }}>
+                      <SelectTrigger className={`w-[80px] ${errors.countryCode ? "border-destructive" : ""}`}>
+                        <SelectValue placeholder="Code" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[300px]">
+                        {countryCodes.map((country) => (
+                          <SelectItem key={country.code} value={country.dialCode}>
+                            {country.dialCode}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="yournumber"
+                      value={phoneNumber}
+                      onChange={(e) => setValue("phoneNumber", e.target.value)}
+                      className={`flex-1 ${errors.phoneNumber ? "border-destructive" : ""}`}
+                    />
+                  </div>
+                )}
               />
-              {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone.message}</p>}
+              {(errors.phoneNumber || errors.countryCode) && (
+                <p className="text-destructive text-sm mt-1">
+                  {errors.phoneNumber?.message || errors.countryCode?.message}
+                </p>
+              )}
             </div>
           </div>
 

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { useToast } from "@/hooks/use-toast";
 import { industries } from "@/data/industries";
 import { useForm, Controller } from "react-hook-form";
@@ -26,18 +27,19 @@ const countries = [
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
   email: z.string().trim().email("Please enter a valid email").max(255, "Email must be less than 255 characters"),
-  phone: z
+  countryCode: z.string().min(1, "Please select a country code"),
+  phoneNumber: z
     .string()
     .trim()
     .min(7, "Please enter a valid phone number")
-    .max(25, "Phone number is too long")
+    .max(20, "Phone number is too long")
     .refine(
       (val) => {
-        // allow +, digits, spaces, hyphens, parentheses; require at least 7 digits total
+        // allow digits, spaces, hyphens, parentheses; require at least 7 digits total
         const cleaned = val.replace(/[^\d]/g, "");
-        return /^[+\d\s()-]+$/.test(val) && cleaned.length >= 7;
+        return /^[\d\s()-]+$/.test(val) && cleaned.length >= 7;
       },
-      "Please enter a valid phone number (include country code if applicable)"
+      "Please enter a valid phone number"
     ),
   country: z.string().min(1, "Please select a country"),
   industry: z.string().min(1, "Please select an industry"),
@@ -66,25 +68,34 @@ const ContactSection = ({ prefilledIndustry, prefilledProduct, isProductNotListe
     handleSubmit,
     control,
     reset,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       name: "",
       email: "",
-      phone: "",
+      countryCode: "+91", // Default to India
+      phoneNumber: "",
       country: "",
       industry: prefilledIndustry || "",
       requirement: defaultRequirement,
     },
   });
 
+  const countryCode = watch("countryCode");
+  const phoneNumber = watch("phoneNumber");
+
   const onSubmit = async (data: ContactFormData) => {
     try {
+      // Combine country code and phone number
+      const fullPhoneNumber = `${data.countryCode} ${data.phoneNumber}`.trim();
+      
       await sendContactEmail({
         name: data.name,
         email: data.email,
-        phone: data.phone,
+        phone: fullPhoneNumber,
         country: data.country,
         industry: data.industry,
         requirement: data.requirement,
@@ -99,7 +110,8 @@ const ContactSection = ({ prefilledIndustry, prefilledProduct, isProductNotListe
       reset({
         name: "",
         email: "",
-        phone: "",
+        countryCode: "+91",
+        phoneNumber: "",
         country: "",
         industry: prefilledIndustry || "",
         requirement: "",
@@ -230,15 +242,28 @@ const ContactSection = ({ prefilledIndustry, prefilledProduct, isProductNotListe
                     {errors.email && <p className="text-destructive text-sm mt-1">{errors.email.message}</p>}
                   </div>
                   <div>
-                    <Label htmlFor="phone">Phone *</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      placeholder="+<country code> <number> (e.g. +1 555 123 4567)"
-                      {...register("phone")}
-                      className={errors.phone ? "border-destructive" : ""}
+                    <Controller
+                      name="countryCode"
+                      control={control}
+                      render={({ field }) => (
+                        <PhoneInput
+                          id="phone"
+                          label="Phone"
+                          countryCode={field.value}
+                          value={phoneNumber}
+                          onCountryCodeChange={(value) => {
+                            field.onChange(value);
+                            setValue("countryCode", value);
+                          }}
+                          onPhoneChange={(value) => {
+                            setValue("phoneNumber", value);
+                          }}
+                          error={errors.phoneNumber?.message || errors.countryCode?.message}
+                          placeholder="yournumber"
+                          required
+                        />
+                      )}
                     />
-                    {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone.message}</p>}
                   </div>
                 </div>
 
