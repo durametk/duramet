@@ -1,21 +1,24 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Download, Send, Car, Plane, Droplet, Zap, Truck, Package } from "lucide-react";
+import { ArrowLeft, Download, Send, Car, Plane, Droplet, Zap, Truck, Package, Check, ChevronsUpDown } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { getIndustryBySlug, Industry, Product } from "@/data/industries";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { sendContactEmail } from "@/lib/email";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Controller } from "react-hook-form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { countryCodes } from "@/lib/country-codes";
 
 import automotiveImg from "@/assets/industry-automotive.jpg";
@@ -83,6 +86,7 @@ interface EnquiryFormProps {
 
 const EnquiryForm = ({ industry, product, isProductNotListed, onClose }: EnquiryFormProps) => {
   const { toast } = useToast();
+  const [codeOpen, setCodeOpen] = useState(false);
 
   const {
     register,
@@ -203,21 +207,51 @@ const EnquiryForm = ({ industry, product, isProductNotListed, onClose }: Enquiry
                 control={control}
                 render={({ field }) => (
                   <div className="flex gap-2">
-                    <Select value={field.value} onValueChange={(value) => {
-                      field.onChange(value);
-                      setValue("countryCode", value);
-                    }}>
-                      <SelectTrigger className={`w-[80px] ${errors.countryCode ? "border-destructive" : ""}`}>
-                        <SelectValue placeholder="Code" />
-                      </SelectTrigger>
-                      <SelectContent className="max-h-[300px]">
-                        {countryCodes.map((country) => (
-                          <SelectItem key={country.code} value={country.dialCode}>
-                            {country.dialCode}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Popover open={codeOpen} onOpenChange={setCodeOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={codeOpen}
+                          className={cn(
+                            "w-[80px] justify-between",
+                            errors.countryCode && "border-destructive"
+                          )}
+                        >
+                          {field.value || "Code"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[200px] p-0" align="start">
+                        <Command>
+                          <CommandInput placeholder="Search code..." />
+                          <CommandList>
+                            <CommandEmpty>No country code found.</CommandEmpty>
+                            <CommandGroup>
+                              {countryCodes.map((country) => (
+                                <CommandItem
+                                  key={country.code}
+                                  value={`${country.dialCode} ${country.code}`}
+                                  onSelect={() => {
+                                    field.onChange(country.dialCode);
+                                    setValue("countryCode", country.dialCode);
+                                    setCodeOpen(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      field.value === country.dialCode ? "opacity-100" : "opacity-0"
+                                    )}
+                                  />
+                                  {country.dialCode}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                     <Input
                       id="phone"
                       type="tel"

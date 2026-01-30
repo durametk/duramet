@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { countryCodes } from "@/lib/country-codes";
 
 interface PhoneInputProps {
@@ -27,6 +31,8 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
   placeholder = "yournumber",
   required = false,
 }) => {
+  const [open, setOpen] = useState(false);
+
   return (
     <div>
       {label && (
@@ -35,18 +41,50 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         </Label>
       )}
       <div className="flex gap-2">
-        <Select value={countryCode} onValueChange={onCountryCodeChange}>
-          <SelectTrigger className={`w-[80px] ${error ? "border-destructive" : ""}`}>
-            <SelectValue placeholder="Code" />
-          </SelectTrigger>
-          <SelectContent className="max-h-[300px]">
-            {countryCodes.map((country) => (
-              <SelectItem key={country.code} value={country.dialCode}>
-                {country.dialCode}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className={cn(
+                "w-[80px] justify-between",
+                error && "border-destructive"
+              )}
+            >
+              {countryCode || "Code"}
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[200px] p-0" align="start">
+            <Command>
+              <CommandInput placeholder="Search code..." />
+              <CommandList>
+                <CommandEmpty>No country code found.</CommandEmpty>
+                <CommandGroup>
+                  {countryCodes.map((country) => (
+                    <CommandItem
+                      key={country.code}
+                      value={`${country.dialCode} ${country.code}`}
+                      onSelect={() => {
+                        onCountryCodeChange(country.dialCode);
+                        setOpen(false);
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          countryCode === country.dialCode ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      {country.dialCode}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
         <Input
           id={id}
           type="tel"
