@@ -153,7 +153,7 @@ const Footer = () => {
 
             {/* Click-anywhere overlay (opens Google Maps) */}
             <a
-              href="https://www.google.com/maps/place/Duramet+Technologies/@12.9429898,77.6279775,17z"
+              href="https://maps.app.goo.gl/RK2ysHXJUXQJuCiX6"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Open location in Google Maps"
