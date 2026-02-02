@@ -140,7 +140,7 @@ const Footer = () => {
           <h4 className="font-heading font-bold text-lg mb-6">Our Location</h4>
           <div className="rounded-lg overflow-hidden h-64 w-full relative">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.450651229667!2d77.62797747491783!3d12.942989787369791!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1500468cac7f%3A0x7c2dc78ac8cc16de!2sDuramet%20Technologies!5e0!3m2!1sen!2sin!4v1769789598464!5m2!1sen!2sin"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.450651229667!2d77.62797747491783!3d12.942989787369791!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1500468cac7f%3A0x7c2dc78ac8cc16de!2sDuramet%20Technologies!5e0!3m2!1sen!2sin!4v1770054938546!5m2!1sen!2sin"
               width="100%"
               height="100%"
               style={{ border: 0 }}
